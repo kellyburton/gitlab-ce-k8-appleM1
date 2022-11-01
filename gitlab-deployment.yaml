@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gitlab-ce
+  name: gitlab-ce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gitlab-ce
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gitlab-ce
+    spec:
+      containers:
+        - image: yrzr/gitlab-ce-arm64v8:latest
+          name: gitlab-ce
+          ports:
+            - containerPort: 80
+            - containerPort: 22
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/gitlab
+              name: gitlab-config
+            - mountPath: /var/log/gitlab
+              name: gitlab-logs
+            - mountPath: /var/opt/gitlab
+              name: gitlab-data
+      restartPolicy: Always
+      volumes:
+        - name: gitlab-config
+          persistentVolumeClaim:
+            claimName: gitlab-config
+        - name: gitlab-logs
+          persistentVolumeClaim:
+            claimName: gitlab-logs
+        - name: gitlab-data
+          persistentVolumeClaim:
+            claimName: gitlab-data
+status: {}

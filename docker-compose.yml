@@ -1,0 +1,13 @@
+version: '3.6'
+services:
+  web:
+    image: 'yrzr/gitlab-ce-arm64v8:latest'
+    restart: always
+    ports:
+      - '8081:80'
+      - '22:22'
+    volumes:
+      - 'gitlab_config:/etc/gitlab'
+      - 'gitlab_logs:/var/log/gitlab'
+      - 'gitlab_data:/var/opt/gitlab'
+    shm_size: '256m'
